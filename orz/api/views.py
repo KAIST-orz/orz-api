@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from orz.api.models import *
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -29,11 +29,28 @@ def school(request, schoolID):
 
 
 @csrf_exempt
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def schoolCourses(request, schoolID):
+    school = get_object_or_404(School, id=schoolID)
     if request.method == "GET":
-        school = get_object_or_404(School, id=schoolID)
         courses = Course.objects.filter(school=school)
         print(courses)
         ctx = [c.toJSON() for c in courses]
         return JsonResponse(ctx, safe=False)
+    elif request.method == "POST":
+        body = request.POST
+        try:
+            name = body["name"]
+            code = body["code"]
+            professor = body["professor"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        course = Course.objects.create(
+            school = school,
+            name = name,
+            code = code,
+            professor = professor,
+        )
+
+        return JsonResponse(course.toJSON())
