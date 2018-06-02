@@ -56,10 +56,10 @@ class Course(models.Model):
     def toJSON(self):
         return {
             "id": self.id,
-            "lecturer": self.lecturer.toJSON(),
-            "students": [s.toJSON() for s in self.students.all()],
-            "school": self.school.toJSON(),
-            "assignments": [a.toJSON() for a in self.assignments.all()],
+            "lecturerID": self.lecturer.id if (self.lecturer is not None) else None,
+            "studentIDs": [s.id for s in self.students.all()],
+            "schoolID": self.school.id,
+            "assignmentIDs": [a.id for a in self.assignments.all()],
             "name": self.name,
             "code": self.code,
             "professor": self.professor,

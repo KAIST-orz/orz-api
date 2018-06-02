@@ -4,13 +4,13 @@ from . import views
 
 urlpatterns = [
     # List of schools
-    path('schools', views.temp_view),
+    path('schools', views.schools),
 
     # A specific school
-    path('schools/<int:schoolID>', views.temp_view),
+    path('schools/<int:schoolID>', views.school),
 
     # List of courses in a specific school
-    path('schools/<int:schoolID>/courses', views.temp_view),
+    path('schools/<int:schoolID>/courses', views.schoolCourses),
 
 
 
