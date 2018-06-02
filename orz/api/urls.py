@@ -4,12 +4,15 @@ from . import views
 
 urlpatterns = [
     # List of schools
+    # Allowed methods : GET
     path('schools', views.schools),
 
     # A specific school
+    # Allowed methods : GET
     path('schools/<int:schoolID>', views.school),
 
     # List of courses in a specific school
+    # Allowed methods : GET, POST
     path('schools/<int:schoolID>/courses', views.schoolCourses),
 
 
