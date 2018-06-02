@@ -3,6 +3,7 @@ from orz.api.models import *
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.http import QueryDict
 
 
 
@@ -54,3 +55,33 @@ def schoolCourses(request, schoolID):
         )
 
         return JsonResponse(course.toJSON())
+
+
+@csrf_exempt
+@require_http_methods(["GET", "PUT", "DELETE"])
+def course(request, courseID):
+    course = get_object_or_404(Course, id=courseID)
+
+    if request.method == "GET":
+        ctx = course.toJSON()
+        return JsonResponse(ctx, safe=False)
+    elif request.method == "PUT":
+        body = QueryDict(request.body)
+        try:
+            name = body["name"]
+            code = body["code"]
+            professor = body["professor"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        course.name = name
+        course.code = code
+        course.professor = professor
+        course.save()
+
+        ctx = course.toJSON()
+        return JsonResponse(ctx)
+    elif request.method == "DELETE":
+        course.delete()
+
+        return JsonResponse({})

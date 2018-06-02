@@ -18,7 +18,8 @@ urlpatterns = [
 
 
     # A specific course
-    path('courses/<int:courseID>', views.temp_view),
+    # Allowed methods : GET, PUT, DELETE
+    path('courses/<int:courseID>', views.course),
 
     # List of assignments of a specific course
     path('courses/<int:courseID>/assignments', views.temp_view),
