@@ -25,7 +25,7 @@ class Lecturer(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField("User", related_name="studentProfile", on_delete=models.CASCADE)
-    subscribingCourses = models.ManyToManyField("Assignment", related_name="students", through="StudentAssignment")
+    subscribingCourses = models.ManyToManyField("Course", related_name="students")
 
     def toJSON(self):
         return {
@@ -67,7 +67,7 @@ class Course(models.Model):
 
 
 class Assignment(models.Model):
-    course = models.ForeignKey("Assignment", related_name="assignments", on_delete=models.CASCADE)
+    course = models.ForeignKey("Course", related_name="assignments", on_delete=models.CASCADE)
     name = models.CharField(max_length = 30)
     due = models.DateTimeField()
     averageTimeEstimation = models.FloatField()
@@ -115,7 +115,7 @@ class Schedule(models.Model):
         }
 
 
-class PersonalSchedule(models.Model):
+class PersonalSchedule(Schedule):
     name = models.CharField(max_length = 30)
 
     def toJSON(self):
@@ -126,7 +126,7 @@ class PersonalSchedule(models.Model):
         }
 
 
-class TimeForAssignment(models.Model):
+class TimeForAssignment(Schedule):
     studentAssignment = models.ForeignKey(StudentAssignment, related_name="timeForAssignments", on_delete=models.CASCADE)
 
     def toJSON(self):
