@@ -6,7 +6,6 @@ from django.views.decorators.http import require_http_methods
 from django.http import QueryDict
 
 
-
 def temp_view(request):
     return JsonResponse({"text":"Hello, World!"})
 
@@ -16,6 +15,7 @@ def temp_view(request):
 def schools(request):
     if request.method == "GET":
         schools = School.objects.all()
+
         ctx = [s.toJSON() for s in schools]
         return JsonResponse(ctx, safe=False)
 
@@ -25,6 +25,7 @@ def schools(request):
 def school(request, schoolID):
     if request.method == "GET":
         school = get_object_or_404(School, id=schoolID)
+
         ctx = school.toJSON()
         return JsonResponse(ctx)
 
@@ -33,13 +34,15 @@ def school(request, schoolID):
 @require_http_methods(["GET", "POST"])
 def schoolCourses(request, schoolID):
     school = get_object_or_404(School, id=schoolID)
+
     if request.method == "GET":
         courses = Course.objects.filter(school=school)
-        print(courses)
+
         ctx = [c.toJSON() for c in courses]
         return JsonResponse(ctx, safe=False)
+
     elif request.method == "POST":
-        body = request.POST
+        body = QueryDict(request.body)
         try:
             name = body["name"]
             code = body["code"]
@@ -54,7 +57,8 @@ def schoolCourses(request, schoolID):
             professor = professor,
         )
 
-        return JsonResponse(course.toJSON())
+        ctx = course.toJSON()
+        return JsonResponse(ctx)
 
 
 @csrf_exempt
@@ -65,6 +69,7 @@ def course(request, courseID):
     if request.method == "GET":
         ctx = course.toJSON()
         return JsonResponse(ctx, safe=False)
+
     elif request.method == "PUT":
         body = QueryDict(request.body)
         try:
@@ -81,6 +86,7 @@ def course(request, courseID):
 
         ctx = course.toJSON()
         return JsonResponse(ctx)
+
     elif request.method == "DELETE":
         course.delete()
 
@@ -94,12 +100,12 @@ def courseAssignments(request, courseID):
 
     if request.method == "GET":
         assignments = course.assignments.all()
+
         ctx = [a.toJSON() for a in assignments]
         return JsonResponse(ctx, safe=False)
 
     elif request.method == "POST":
         body = QueryDict(request.body)
-        print(body)
         try:
             name = body["name"]
             due = body["due"]
