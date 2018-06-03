@@ -3,6 +3,12 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    USER_TYPE_CHOICES = (
+        (1, "lecturer"),
+        (2, "student"),
+    )
+
+    type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
     school = models.ForeignKey("School", on_delete=models.PROTECT)
 
     def toJSON(self):
