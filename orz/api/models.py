@@ -70,7 +70,7 @@ class Assignment(models.Model):
     course = models.ForeignKey("Course", related_name="assignments", on_delete=models.CASCADE)
     name = models.CharField(max_length = 30)
     due = models.DateTimeField()
-    averageTimeEstimation = models.FloatField()
+    averageTimeEstimation = models.FloatField(default=0)
     description = models.CharField(max_length = 200)
 
     def toJSON(self):

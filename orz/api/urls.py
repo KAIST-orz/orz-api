@@ -22,7 +22,8 @@ urlpatterns = [
     path('courses/<int:courseID>', views.course),
 
     # List of assignments of a specific course
-    path('courses/<int:courseID>/assignments', views.temp_view),
+    # Allowed methods : GET, POST
+    path('courses/<int:courseID>/assignments', views.courseAssignments),
 
 
 
