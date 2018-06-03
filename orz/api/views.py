@@ -267,3 +267,20 @@ def studentAssignment(request, userID, assignmentID):
 
         ctx = studentAssignment.toJSON()
         return JsonResponse(ctx)
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def studentSchedules(request, userID):
+    if request.method == "GET":
+        student = get_object_or_404(Student, user__id=userID)
+        assignments = Assignment.objects.filter(course__students=student)
+        personalSchedules = PersonalSchedule.objects.filter(student=student)
+        timeForAssignments = TimeForAssignment.objects.filter(student=student)
+
+        ctx = {
+            "assignments": [a.toJSON() for a in assignments],
+            "personalSchedules": [p.toJSON() for p in personalSchedules],
+            "timeForAssignments": [t.toJSON() for t in timeForAssignments],
+        }
+        return JsonResponse(ctx)
