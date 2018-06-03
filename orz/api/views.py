@@ -116,3 +116,35 @@ def courseAssignments(request, courseID):
 
         ctx = assignment.toJSON()
         return JsonResponse(ctx)
+
+
+@csrf_exempt
+@require_http_methods(["GET", "PUT", "DELETE"])
+def assignment(request, assignmentID):
+    assignment = get_object_or_404(Assignment, id=assignmentID)
+
+    if request.method == "GET":
+        ctx = assignment.toJSON()
+        return JsonResponse(ctx)
+
+    elif request.method == "PUT":
+        body = QueryDict(request.body)
+        try:
+            name = body["name"]
+            due = body["due"]
+            description = body["description"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        assignment.name = name
+        assignment.due = due
+        assignment.description = description
+        assignment.save()
+
+        ctx = assignment.toJSON()
+        return JsonResponse(ctx)
+
+    elif request.method == "DELETE":
+        assignment.delete()
+
+        return JsonResponse({})

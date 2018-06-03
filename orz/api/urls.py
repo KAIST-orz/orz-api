@@ -28,7 +28,8 @@ urlpatterns = [
 
 
     # A specific assignment
-    path('assignments/<int:assignmentID>', views.temp_view),
+    # Allowed methods : GET, PUT, DELETE
+    path('assignments/<int:assignmentID>', views.assignment),
 
 
 
