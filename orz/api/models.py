@@ -115,6 +115,7 @@ class StudentAssignment(models.Model):
             "id": self.id,
             "timeEstimation": self.timeEstimation,
             "timeForAssignments": [t.toJSON() for t in self.timeForAssignments.all()],
+            "timeForAssignmentsSum": sum((t.end-t.start).total_seconds()/3600 for t in self.timeForAssignments.all()),
         }
 
 
