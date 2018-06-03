@@ -34,35 +34,35 @@ urlpatterns = [
 
 
     # A specific lecturer
-    path('lecturer/<int:lecturerID>', views.temp_view),
+    path('lecturers/<int:userID>', views.temp_view),
 
     # List of courses managed by a specific lecturer
-    path('lecturer/<int:lecturerID>/courses', views.temp_view),
+    path('lecturers/<int:userID>/courses', views.temp_view),
 
 
 
     # A specific student
-    path('student/<int:studentID>', views.temp_view),
+    path('students/<int:userID>', views.temp_view),
 
     # List of courses subscribed by a specific student
-    path('student/<int:studentID>/courses', views.temp_view),
+    path('students/<int:userID>/courses', views.temp_view),
 
     # List of assignments of a specific student
-    path('student/<int:studentID>/assignments', views.temp_view),
+    path('students/<int:userID>/assignments', views.temp_view),
 
     # A specific assignment of a specific student
-    path('student/<int:studentID>/assignments/<int:AssignmentID>', views.temp_view),
+    path('students/<int:userID>/assignments/<int:AssignmentID>', views.temp_view),
 
     # List of personal schedules of a specific student
-    path('student/<int:studentID>/personal-schedules', views.temp_view),
+    path('students/<int:userID>/personal-schedules', views.temp_view),
 
     # A specific personal schedule of a specific student
-    path('student/<int:studentID>/personal-schedules/<int:scheduleID>', views.temp_view),
+    path('students/<int:userID>/personal-schedules/<int:scheduleID>', views.temp_view),
 
     # List of time for assignments of a specific student
-    path('student/<int:studentID>/time-for-assignments', views.temp_view),
+    path('students/<int:userID>/time-for-assignments', views.temp_view),
 
     # A specific time for assignment of a specific student
-    path('student/<int:studentID>/time-for-assignments/<int:scheduleID>', views.temp_view)
+    path('students/<int:userID>/time-for-assignments/<int:scheduleID>', views.temp_view)
 
 ]
