@@ -85,6 +85,7 @@ class Assignment(models.Model):
         return {
             "id": self.id,
             "courseID": self.course.id,
+            "courseName": self.course.name,
             "name": self.name,
             "due": self.due,
             "averageTimeEstimation": self.averageTimeEstimation,
