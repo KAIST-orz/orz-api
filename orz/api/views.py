@@ -322,7 +322,11 @@ def studentPersonalSchedule(request, userID, scheduleID):
     student = get_object_or_404(Student, user__id=userID)
     personalSchedule = get_object_or_404(PersonalSchedule, student=student, id=scheduleID)
 
-    if request.method == "PUT":
+    if request.method == "GET":
+        ctx = personalSchedule.toJSON()
+        return JsonResponse(ctx)
+
+    elif request.method == "PUT":
         body = QueryDict(request.body)
         try:
             start = body["start"]
@@ -338,6 +342,7 @@ def studentPersonalSchedule(request, userID, scheduleID):
 
         ctx = personalSchedule.toJSON()
         return JsonResponse(ctx)
+
     elif request.method == "DELETE":
         personalSchedule.delete()
 
@@ -383,7 +388,11 @@ def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID
     studentAssignment = StudentAssignment.objects.get_or_create(student=student, assignment=assignment)[0]
     timeForAssignment = get_object_or_404(TimeForAssignment, studentAssignment=studentAssignment, id=scheduleID)
 
-    if request.method == "PUT":
+    if request.method == "GET":
+        ctx = timeForAssignment.toJSON()
+        return JsonResponse(ctx)
+
+    elif request.method == "PUT":
         body = QueryDict(request.body)
         try:
             start = body["start"]
