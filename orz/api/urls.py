@@ -34,7 +34,8 @@ urlpatterns = [
 
 
     # A specific lecturer
-    path('lecturers/<int:userID>', views.temp_view),
+    # Allowed methods : GET, PUT, DELETE
+    path('lecturers/<int:userID>', views.lecturer),
 
     # List of courses managed by a specific lecturer
     path('lecturers/<int:userID>/courses', views.temp_view),

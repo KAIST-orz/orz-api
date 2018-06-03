@@ -154,3 +154,33 @@ def assignment(request, assignmentID):
         assignment.delete()
 
         return JsonResponse({})
+
+
+@csrf_exempt
+@require_http_methods(["GET", "PUT", "DELETE"])
+def lecturer(request, userID):
+    lecturer = get_object_or_404(Lecturer, user__id=userID)
+
+    if request.method == "GET":
+        ctx = lecturer.toJSON()
+        return JsonResponse(ctx)
+
+    elif request.method == "PUT":
+        body = QueryDict(request.body)
+        try:
+            email = body["email"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        lecturer.user.email = email
+        if "password" in body:
+            lecturer.user.set_password(body["password"])
+        lecturer.user.save()
+
+        ctx = lecturer.toJSON()
+        return JsonResponse(ctx)
+
+    elif request.method == "DELETE":
+        lecturer.user.delete()
+
+        return JsonResponse({})

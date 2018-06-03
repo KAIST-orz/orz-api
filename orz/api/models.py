@@ -14,6 +14,8 @@ class User(AbstractUser):
     def toJSON(self):
         return {
             "id": self.id,
+            "username": self.username,
+            "email": self.email,
             "school": self.school.toJSON(),
         }
 
