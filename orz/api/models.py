@@ -153,5 +153,5 @@ class TimeForAssignment(Schedule):
         return {
             **super().toJSON(),
             "id": self.id,
-            "name": self.name,
+            "assignmentID": self.studentAssignment.assignment.id,
         }

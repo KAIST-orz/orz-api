@@ -73,10 +73,12 @@ urlpatterns = [
     # Allowed methods : GET, PUT, DELETE
     path('students/<int:userID>/personal-schedules/<int:scheduleID>', views.studentPersonalSchedule),
 
-    # List of time for assignments of a specific student
-    path('students/<int:userID>/time-for-assignments', views.temp_view),
+    # List of time for assignments of a specific assignment of a specific student
+    # Allowed methods : GET, POST
+    path('students/<int:userID>/assignments/<int:assignmentID>/time-for-assignments', views.studentAssignmentTimeForAssignments),
 
-    # A specific time for assignment of a specific student
-    path('students/<int:userID>/time-for-assignments/<int:scheduleID>', views.temp_view)
+    # A specific time for assignment of a specific assignment of a specific student
+    # Allowed methods : GET, PUT, DELETE
+    path('students/<int:userID>/assignments/<int:assignmentID>/time-for-assignments/<int:scheduleID>', views.studentAssignmentTimeForAssignment)
 
 ]

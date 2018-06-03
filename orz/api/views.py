@@ -342,3 +342,62 @@ def studentPersonalSchedule(request, userID, scheduleID):
         personalSchedule.delete()
 
         return JsonResponse({})
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def studentAssignmentTimeForAssignments(request, userID, assignmentID):
+    student = get_object_or_404(Student, user__id=userID)
+    assignment = get_object_or_404(Assignment, id=assignmentID)
+    studentAssignment = StudentAssignment.objects.get_or_create(student=student, assignment=assignment)[0]
+
+    if request.method == "GET":
+        timeForAssignments = studentAssignment.timeForAssignments.all()
+
+        ctx = [p.toJSON() for p in timeForAssignments]
+        return JsonResponse(ctx, safe=False)
+    elif request.method == "POST":
+        body = QueryDict(request.body)
+        try:
+            start = body["start"]
+            end = body["end"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        timeForAssignments = TimeForAssignment.objects.create(
+            student = student,
+            start = start,
+            end = end,
+            studentAssignment = studentAssignment,
+        )
+
+        ctx = timeForAssignments.toJSON()
+        return JsonResponse(ctx)
+
+
+@csrf_exempt
+@require_http_methods(["PUT", "DELETE"])
+def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID):
+    student = get_object_or_404(Student, user__id=userID)
+    assignment = get_object_or_404(Assignment, id=assignmentID)
+    studentAssignment = StudentAssignment.objects.get_or_create(student=student, assignment=assignment)[0]
+    timeForAssignment = get_object_or_404(TimeForAssignment, studentAssignment=studentAssignment, id=scheduleID)
+
+    if request.method == "PUT":
+        body = QueryDict(request.body)
+        try:
+            start = body["start"]
+            end = body["end"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        timeForAssignment.start = start
+        timeForAssignment.end = end
+        timeForAssignment.save()
+
+        ctx = timeForAssignment.toJSON()
+        return JsonResponse(ctx)
+    elif request.method == "DELETE":
+        timeForAssignment.delete()
+
+        return JsonResponse({})
