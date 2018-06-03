@@ -75,7 +75,7 @@ class Assignment(models.Model):
     def toJSON(self):
         return {
             "id": self.id,
-            "course": self.course.toJSON(),
+            "courseID": self.course.id,
             "name": self.name,
             "due": self.due,
             "averageTimeEstimation": self.averageTimeEstimation,
@@ -108,7 +108,7 @@ class Schedule(models.Model):
     def toJSON(self):
         return {
             "id": self.id,
-            "student": self.student.toJSON(),
+            "studentID": self.student.id,
             "start": self.start,
             "end": self.end,
         }
