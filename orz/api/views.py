@@ -225,3 +225,45 @@ def studentCourse(request, userID, courseID):
         student.subscribingCourses.remove(course)
 
         return JsonResponse({})
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def studentAssignments(request, userID):
+    student = get_object_or_404(Student, user__id=userID)
+
+    if request.method == "GET":
+        ctx = []
+        for c in student.subscribingCourses.all():
+            for a in c.assignments.all():
+                studentAssignment = StudentAssignment.objects.get_or_create(student=student, assignment=a)[0]
+                ctx.append(studentAssignment.toJSON())
+
+        return JsonResponse(ctx, safe=False)
+
+
+@csrf_exempt
+@require_http_methods(["GET", "PUT"])
+def studentAssignment(request, userID, assignmentID):
+    student = get_object_or_404(Student, user__id=userID)
+    assignment = get_object_or_404(Assignment, id=assignmentID)
+    studentAssignment = StudentAssignment.objects.get_or_create(student=student, assignment=assignment)[0]
+
+    if request.method == "GET":
+        ctx = studentAssignment.toJSON()
+        return JsonResponse(ctx)
+
+    elif request.method == "PUT":
+        body = QueryDict(request.body)
+        try:
+            timeEstimation = body["timeEstimation"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        studentAssignment.timeEstimation = timeEstimation
+        studentAssignment.save()
+
+        assignment.updateAverageTimeEstimation()
+
+        ctx = studentAssignment.toJSON()
+        return JsonResponse(ctx)

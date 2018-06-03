@@ -78,7 +78,7 @@ class Assignment(models.Model):
     course = models.ForeignKey("Course", related_name="assignments", on_delete=models.CASCADE)
     name = models.CharField(max_length = 30)
     due = models.DateTimeField()
-    averageTimeEstimation = models.FloatField(default=0)
+    averageTimeEstimation = models.FloatField(null=True)
     description = models.CharField(max_length = 200)
 
     def toJSON(self):
@@ -91,18 +91,29 @@ class Assignment(models.Model):
             "description": self.description,
         }
 
+    def updateAverageTimeEstimation(self):
+        studentAssignments = StudentAssignment.objects.filter(assignment=self)
+        num = 0
+        sum = 0
+        for a in studentAssignments:
+            if a.timeEstimation != None:
+                num += 1
+                sum += a.timeEstimation
+        self.averageTimeEstimation = sum/num if num>0 else None
+        self.save()
+
 
 class StudentAssignment(models.Model):
     student = models.ForeignKey("Student", related_name="studentAssignments", on_delete=models.CASCADE)
     assignment = models.ForeignKey("Assignment", related_name="studentAssignments", on_delete=models.CASCADE)
-    timeEstimation = models.IntegerField()
+    timeEstimation = models.IntegerField(null=True)
 
     def toJSON(self):
         return {
             **self.assignment.toJSON(),
             "id": self.id,
             "timeEstimation": self.timeEstimation,
-            "timeForAssignments": self.timeForAssignments,
+            "timeForAssignments": [t.toJSON() for t in self.timeForAssignments.all()],
         }
 
 
