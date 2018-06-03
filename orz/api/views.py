@@ -271,7 +271,7 @@ def studentAssignment(request, userID, assignmentID):
 
 @csrf_exempt
 @require_http_methods(["GET"])
-def studentSchedules(request, userID):
+def studentCalendarEvents(request, userID):
     if request.method == "GET":
         student = get_object_or_404(Student, user__id=userID)
         assignments = Assignment.objects.filter(course__students=student)

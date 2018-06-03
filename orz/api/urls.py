@@ -63,7 +63,7 @@ urlpatterns = [
 
     # List of schedules of a specific student
     # Allowed methods : GET
-    path('students/<int:userID>/schedules', views.studentSchedules),
+    path('students/<int:userID>/calendar-events', views.studentCalendarEvents),
 
     # List of personal schedules of a specific student
     path('students/<int:userID>/personal-schedules', views.temp_view),
