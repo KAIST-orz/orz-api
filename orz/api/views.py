@@ -197,3 +197,31 @@ def lecturerCourses(request, userID):
 
         ctx = course.toJSON()
         return JsonResponse(ctx)
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def studentCourses(request, userID):
+    if request.method == "GET":
+        student = get_object_or_404(Student, user__id=userID)
+        courses = student.subscribingCourses.all()
+
+        ctx = [c.toJSON() for c in courses]
+        return JsonResponse(ctx, safe=False)
+
+
+@csrf_exempt
+@require_http_methods(["POST", "DELETE"])
+def studentCourse(request, userID, courseID):
+    student = get_object_or_404(Student, user__id=userID)
+    course = get_object_or_404(Course, id=courseID)
+
+    if request.method == "POST":
+        student.subscribingCourses.add(course)
+
+        return JsonResponse({})
+
+    elif request.method == "DELETE":
+        student.subscribingCourses.remove(course)
+
+        return JsonResponse({})

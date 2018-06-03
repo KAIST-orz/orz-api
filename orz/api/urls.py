@@ -46,7 +46,12 @@ urlpatterns = [
 
 
     # List of courses subscribed by a specific student
-    path('students/<int:userID>/courses', views.temp_view),
+    # Allowed methods : GET
+    path('students/<int:userID>/courses', views.studentCourses),
+
+    # A specific course subscribed by a specific student
+    # Allowed methods : POST, DELETE
+    path('students/<int:userID>/courses/<int:courseID>', views.studentCourse),
 
     # List of assignments of a specific student
     path('students/<int:userID>/assignments', views.temp_view),
