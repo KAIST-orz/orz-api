@@ -284,3 +284,61 @@ def studentCalendarEvents(request, userID):
             "timeForAssignments": [t.toJSON() for t in timeForAssignments],
         }
         return JsonResponse(ctx)
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def studentPersonalSchedules(request, userID):
+    student = get_object_or_404(Student, user__id=userID)
+
+    if request.method == "GET":
+        personalSchedules = PersonalSchedule.objects.filter(student=student)
+
+        ctx = [p.toJSON() for p in personalSchedules]
+        return JsonResponse(ctx, safe=False)
+    elif request.method == "POST":
+        body = QueryDict(request.body)
+        try:
+            start = body["start"]
+            end = body["end"]
+            name = body["name"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        personalSchedule = PersonalSchedule.objects.create(
+            student = student,
+            start = start,
+            end = end,
+            name = name,
+        )
+
+        ctx = personalSchedule.toJSON()
+        return JsonResponse(ctx)
+
+
+@csrf_exempt
+@require_http_methods(["PUT", "DELETE"])
+def studentPersonalSchedule(request, userID, scheduleID):
+    student = get_object_or_404(Student, user__id=userID)
+    personalSchedule = get_object_or_404(PersonalSchedule, student=student, id=scheduleID)
+
+    if request.method == "PUT":
+        body = QueryDict(request.body)
+        try:
+            start = body["start"]
+            end = body["end"]
+            name = body["name"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        personalSchedule.start = start
+        personalSchedule.end = end
+        personalSchedule.name = name
+        personalSchedule.save()
+
+        ctx = personalSchedule.toJSON()
+        return JsonResponse(ctx)
+    elif request.method == "DELETE":
+        personalSchedule.delete()
+
+        return JsonResponse({})

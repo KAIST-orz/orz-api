@@ -66,10 +66,12 @@ urlpatterns = [
     path('students/<int:userID>/calendar-events', views.studentCalendarEvents),
 
     # List of personal schedules of a specific student
-    path('students/<int:userID>/personal-schedules', views.temp_view),
+    # Allowed methods : GET, POST
+    path('students/<int:userID>/personal-schedules', views.studentPersonalSchedules),
 
     # A specific personal schedule of a specific student
-    path('students/<int:userID>/personal-schedules/<int:scheduleID>', views.temp_view),
+    # Allowed methods : GET, PUT, DELETE
+    path('students/<int:userID>/personal-schedules/<int:scheduleID>', views.studentPersonalSchedule),
 
     # List of time for assignments of a specific student
     path('students/<int:userID>/time-for-assignments', views.temp_view),
