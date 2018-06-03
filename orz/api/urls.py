@@ -33,18 +33,17 @@ urlpatterns = [
 
 
 
-    # A specific lecturer
+    # A specific user
     # Allowed methods : GET, PUT, DELETE
-    path('lecturers/<int:userID>', views.lecturer),
+    path('users/<int:userID>', views.user),
+
+
 
     # List of courses managed by a specific lecturer
     # Allowed methods : GET, POST
     path('lecturers/<int:userID>/courses', views.lecturerCourses),
 
 
-
-    # A specific student
-    path('students/<int:userID>', views.temp_view),
 
     # List of courses subscribed by a specific student
     path('students/<int:userID>/courses', views.temp_view),

@@ -16,6 +16,7 @@ class User(AbstractUser):
             "id": self.id,
             "username": self.username,
             "email": self.email,
+            "type": self.type,
             "school": self.school.toJSON(),
         }
 
