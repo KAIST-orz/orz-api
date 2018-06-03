@@ -41,25 +41,6 @@ def schoolCourses(request, schoolID):
         ctx = [c.toJSON() for c in courses]
         return JsonResponse(ctx, safe=False)
 
-    elif request.method == "POST":
-        body = QueryDict(request.body)
-        try:
-            name = body["name"]
-            code = body["code"]
-            professor = body["professor"]
-        except KeyError:
-            return HttpResponseBadRequest('Missing fields in request data')
-
-        course = Course.objects.create(
-            school = school,
-            name = name,
-            code = code,
-            professor = professor,
-        )
-
-        ctx = course.toJSON()
-        return JsonResponse(ctx)
-
 
 @csrf_exempt
 @require_http_methods(["GET", "PUT", "DELETE"])
@@ -184,3 +165,35 @@ def lecturer(request, userID):
         lecturer.user.delete()
 
         return JsonResponse({})
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def lecturerCourses(request, userID):
+    lecturer = get_object_or_404(Lecturer, user__id=userID)
+
+    if request.method == "GET":
+        courses = lecturer.managingCourses.all()
+
+        ctx = [c.toJSON() for c in courses]
+        return JsonResponse(ctx, safe=False)
+
+    elif request.method == "POST":
+        body = QueryDict(request.body)
+        try:
+            name = body["name"]
+            code = body["code"]
+            professor = body["professor"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        course = Course.objects.create(
+            lecturer = lecturer,
+            school = lecturer.user.school,
+            name = name,
+            code = code,
+            professor = professor,
+        )
+
+        ctx = course.toJSON()
+        return JsonResponse(ctx)

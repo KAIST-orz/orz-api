@@ -12,7 +12,7 @@ urlpatterns = [
     path('schools/<int:schoolID>', views.school),
 
     # List of courses in a specific school
-    # Allowed methods : GET, POST
+    # Allowed methods : GET
     path('schools/<int:schoolID>/courses', views.schoolCourses),
 
 
@@ -38,7 +38,8 @@ urlpatterns = [
     path('lecturers/<int:userID>', views.lecturer),
 
     # List of courses managed by a specific lecturer
-    path('lecturers/<int:userID>/courses', views.temp_view),
+    # Allowed methods : GET, POST
+    path('lecturers/<int:userID>/courses', views.lecturerCourses),
 
 
 
