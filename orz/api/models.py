@@ -24,7 +24,7 @@ class Lecturer(models.Model):
     def toJSON(self):
         return {
             **self.user.toJSON(),
-            managingCourses: [c.toJSON for c in self.managingCourses.all()],
+            "managingCourses": [c.toJSON() for c in self.managingCourses.all()],
         }
 
 
@@ -35,7 +35,7 @@ class Student(models.Model):
     def toJSON(self):
         return {
             **self.user.toJSON(),
-            managingCourses: [c.toJSON for c in self.subscribingCourses.all()],
+            "subscribingCourses": [c.toJSON() for c in self.subscribingCourses.all()],
         }
 
 
