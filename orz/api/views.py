@@ -302,6 +302,7 @@ def studentPersonalSchedules(request, userID):
             start = body["start"]
             end = body["end"]
             name = body["name"]
+            alarms = body.getlist("alarms")
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
@@ -311,6 +312,9 @@ def studentPersonalSchedules(request, userID):
             end = end,
             name = name,
         )
+        for a in alarms:
+            scheduleAlarm = ScheduleAlarm.objects.create(minutes=a)
+            personalSchedule.alarms.add(scheduleAlarm)
 
         ctx = personalSchedule.toJSON()
         return JsonResponse(ctx)
@@ -332,6 +336,7 @@ def studentPersonalSchedule(request, userID, scheduleID):
             start = body["start"]
             end = body["end"]
             name = body["name"]
+            alarms = body.getlist("alarms")
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
@@ -339,6 +344,10 @@ def studentPersonalSchedule(request, userID, scheduleID):
         personalSchedule.end = end
         personalSchedule.name = name
         personalSchedule.save()
+        personalSchedule.alarms.all().delete()
+        for a in alarms:
+            scheduleAlarm = ScheduleAlarm.objects.create(minutes=a)
+            personalSchedule.alarms.add(scheduleAlarm)
 
         ctx = personalSchedule.toJSON()
         return JsonResponse(ctx)
@@ -366,6 +375,7 @@ def studentAssignmentTimeForAssignments(request, userID, assignmentID):
         try:
             start = body["start"]
             end = body["end"]
+            alarms = body.getlist("alarms")
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
@@ -375,6 +385,9 @@ def studentAssignmentTimeForAssignments(request, userID, assignmentID):
             end = end,
             studentAssignment = studentAssignment,
         )
+        for a in alarms:
+            scheduleAlarm = ScheduleAlarm.objects.create(minutes=a)
+            timeForAssignments.alarms.add(scheduleAlarm)
 
         ctx = timeForAssignments.toJSON()
         return JsonResponse(ctx)
@@ -397,12 +410,17 @@ def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID
         try:
             start = body["start"]
             end = body["end"]
+            alarms = body.getlist("alarms")
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
         timeForAssignment.start = start
         timeForAssignment.end = end
         timeForAssignment.save()
+        timeForAssignment.alarms.all().delete()
+        for a in alarms:
+            scheduleAlarm = ScheduleAlarm.objects.create(minutes=a)
+            timeForAssignment.alarms.add(scheduleAlarm)
 
         ctx = timeForAssignment.toJSON()
         return JsonResponse(ctx)

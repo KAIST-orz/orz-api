@@ -123,6 +123,7 @@ class Schedule(models.Model):
     student = models.ForeignKey(Student, related_name="%(class)ss", on_delete=models.CASCADE)
     start = models.DateTimeField()
     end = models.DateTimeField()
+    alarms = models.ManyToManyField("ScheduleAlarm")
 
     class Meta:
         abstract = True
@@ -133,6 +134,7 @@ class Schedule(models.Model):
             "studentID": self.student.id,
             "start": self.start,
             "end": self.end,
+            "alarms": [a.minutes for a in self.alarms.all()],
         }
 
 
@@ -156,3 +158,7 @@ class TimeForAssignment(Schedule):
             "id": self.id,
             "assignmentID": self.studentAssignment.assignment.id,
         }
+
+
+class ScheduleAlarm(models.Model):
+    minutes = models.IntegerField()
