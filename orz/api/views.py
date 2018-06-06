@@ -15,7 +15,7 @@ def temp_view(request):
 
 
 @csrf_exempt
-@requre_http_methods(["POST"])
+@require_http_methods(["POST"])
 def signup(request):
     if request.method == "POST":
         json.loads(request.body.decode('utf-8'))
@@ -37,7 +37,7 @@ def signup(request):
 
 
 @csrf_exempt
-@requre_http_methods(["POST"])
+@require_http_methods(["POST"])
 def signin(request):
     if request.method == "POST":
         json.loads(request.body.decode('utf-8'))
