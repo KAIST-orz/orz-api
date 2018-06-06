@@ -3,6 +3,14 @@ from . import views
 
 
 urlpatterns = [
+    # Sign up
+    # Allowed methods : POST
+    path('signup', views.signup),
+
+    # Sign in
+    # Allowed methods : POST
+    path('signin', views.signin),
+
     # List of schools
     # Allowed methods : GET
     path('schools', views.schools),

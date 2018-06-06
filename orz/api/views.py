@@ -1,5 +1,7 @@
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
+
 from orz.api.models import *
+from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -8,6 +10,48 @@ from django.http import QueryDict
 
 def temp_view(request):
     return JsonResponse({"text":"Hello, World!"})
+
+
+@csrf_exempt
+@requre_http_methods(["POST"])
+def signup(request):
+    if request.method == "POST":
+        body = QueryDict(request.body)
+        try:
+            username = body["username"]
+            email = body["email"]
+            password = body["password"]
+            isLecturer = body["isLecturer"]
+            schoolID = body["schoolID"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        type = 1 if isLecturer else 2
+        school = get_object_or_404(School, id=schoolID)
+
+        User.objects.create_user(username=username, email=email, password=password, type=type, school=school)
+
+        return JsonResponse({})
+
+
+@csrf_exempt
+@requre_http_methods(["POST"])
+def signin(request):
+    if request.method == "POST":
+        body = QueryDict(request.body)
+        try:
+            username = body["username"]
+            password = body["password"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            ctx = user.toJSON()
+            return JsonResponse(ctx)
+        else:
+            return HttpResponseForbidden('No such user')
 
 
 @csrf_exempt
