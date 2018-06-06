@@ -17,7 +17,8 @@ class User(AbstractUser):
             "username": self.username,
             "email": self.email,
             "type": self.type,
-            "school": self.school.toJSON(),
+            "schoolID": self.school.id,
+            "schoolName": self.school.name,
         }
 
 
@@ -108,12 +109,13 @@ class StudentAssignment(models.Model):
     student = models.ForeignKey("Student", related_name="studentAssignments", on_delete=models.CASCADE)
     assignment = models.ForeignKey("Assignment", related_name="studentAssignments", on_delete=models.CASCADE)
     timeEstimation = models.IntegerField(null=True)
+    significance = models.IntegerField(null=True)
 
     def toJSON(self):
         return {
             **self.assignment.toJSON(),
-            "id": self.id,
             "timeEstimation": self.timeEstimation,
+            "significance": self.significance,
             "timeForAssignments": [t.toJSON() for t in self.timeForAssignments.all()],
             "timeForAssignmentsSum": sum((t.end-t.start).total_seconds()/3600 for t in self.timeForAssignments.all()),
         }
