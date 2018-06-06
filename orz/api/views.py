@@ -408,6 +408,22 @@ def studentPersonalSchedule(request, userID, scheduleID):
 
 
 @csrf_exempt
+@require_http_methods(["GET"])
+def studentTimeForAssignments(request, userID):
+    if request.method == "GET":
+        student = get_object_or_404(Student, user__id=userID)
+
+        ctx = []
+        for c in student.subscribingCourses.all():
+            for a in c.assignments.all():
+                studentAssignment = StudentAssignment.objects.get_or_create(student=student, assignment=a)[0]
+                timeForAssignments = studentAssignment.timeForAssignments.all()
+                ctx.extend([t.toJSON() for t in timeForAssignments])
+
+        return JsonResponse(ctx, safe=False)
+
+
+@csrf_exempt
 @require_http_methods(["GET", "POST"])
 def studentAssignmentTimeForAssignments(request, userID, assignmentID):
     student = get_object_or_404(Student, user__id=userID)
