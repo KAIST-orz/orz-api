@@ -81,9 +81,9 @@ urlpatterns = [
     # Allowed methods : GET, PUT, DELETE
     path('students/<int:userID>/personal-schedules/<int:scheduleID>', views.studentPersonalSchedule),
 
-    # A specific personal schedule of a specific student
+    # List of time for assignments of a specific student
     # Allowed methods : GET
-    path('students/<int:userID>/time-for-assignments/<int:scheduleID>', views.studentTimeForAssignments),
+    path('students/<int:userID>/time-for-assignments', views.studentTimeForAssignments),
 
     # List of time for assignments of a specific assignment of a specific student
     # Allowed methods : GET, POST
