@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.http import QueryDict
 
 import json
 
@@ -18,7 +17,7 @@ def temp_view(request):
 @require_http_methods(["POST"])
 def signup(request):
     if request.method == "POST":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             username = body["username"]
             email = body["email"]
@@ -40,7 +39,7 @@ def signup(request):
 @require_http_methods(["POST"])
 def signin(request):
     if request.method == "POST":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             username = body["username"]
             password = body["password"]
@@ -98,7 +97,7 @@ def course(request, courseID):
         return JsonResponse(ctx, safe=False)
 
     elif request.method == "PUT":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             name = body["name"]
             code = body["code"]
@@ -132,7 +131,7 @@ def courseAssignments(request, courseID):
         return JsonResponse(ctx, safe=False)
 
     elif request.method == "POST":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             name = body["name"]
             due = body["due"]
@@ -161,7 +160,7 @@ def assignment(request, assignmentID):
         return JsonResponse(ctx)
 
     elif request.method == "PUT":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             name = body["name"]
             due = body["due"]
@@ -193,7 +192,7 @@ def user(request, userID):
         return JsonResponse(ctx)
 
     elif request.method == "PUT":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             email = body["email"]
         except KeyError:
@@ -225,7 +224,7 @@ def lecturerCourses(request, userID):
         return JsonResponse(ctx, safe=False)
 
     elif request.method == "POST":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             name = body["name"]
             code = body["code"]
@@ -300,7 +299,7 @@ def studentAssignment(request, userID, assignmentID):
         return JsonResponse(ctx)
 
     elif request.method == "PUT":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             timeEstimation = body["timeEstimation"]
         except KeyError:
@@ -343,7 +342,7 @@ def studentPersonalSchedules(request, userID):
         ctx = [p.toJSON() for p in personalSchedules]
         return JsonResponse(ctx, safe=False)
     elif request.method == "POST":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             start = body["start"]
             end = body["end"]
@@ -377,7 +376,7 @@ def studentPersonalSchedule(request, userID, scheduleID):
         return JsonResponse(ctx)
 
     elif request.method == "PUT":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             start = body["start"]
             end = body["end"]
@@ -417,7 +416,7 @@ def studentAssignmentTimeForAssignments(request, userID, assignmentID):
         ctx = [p.toJSON() for p in timeForAssignments]
         return JsonResponse(ctx, safe=False)
     elif request.method == "POST":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             start = body["start"]
             end = body["end"]
@@ -452,7 +451,7 @@ def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID
         return JsonResponse(ctx)
 
     elif request.method == "PUT":
-        json.loads(request.body.decode('utf-8'))
+        body = json.loads(request.body.decode('utf-8'))
         try:
             start = body["start"]
             end = body["end"]
