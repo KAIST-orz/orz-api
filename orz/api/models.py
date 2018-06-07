@@ -168,6 +168,7 @@ class TimeForAssignment(Schedule):
             "id": self.id,
             "assignmentID": self.studentAssignment.assignment.id,
             "assignmentName": self.studentAssignment.assignment.name,
+            "courseID": self.studentAssignment.assignment.course.id,
             "courseName": self.studentAssignment.assignment.course.name,
         }
 
