@@ -31,7 +31,7 @@ def signup(request):
         type = 1 if isLecturer else 2
         school = get_object_or_404(School, id=schoolID)
 
-        user = User.objects.create_user(username=username, email=email, password=password, type=type, school=school)
+        user = User.objects.create_user(username=username, email=email, password=password, name=name, type=type, school=school)
         if type==1:
             Lecturer.objects.create(user=user)
         elif type==2:
