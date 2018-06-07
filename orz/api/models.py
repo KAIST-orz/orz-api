@@ -101,7 +101,7 @@ class Assignment(models.Model):
         num = 0
         sum = 0
         for a in studentAssignments:
-            if a.timeEstimation != None:
+            if a.timeEstimation != None and a.timeEstimation > 0:
                 num += 1
                 sum += a.timeEstimation
         self.averageTimeEstimation = sum/num if num>0 else None
