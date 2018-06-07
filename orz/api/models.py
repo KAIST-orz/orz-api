@@ -8,6 +8,7 @@ class User(AbstractUser):
         (2, "student"),
     )
 
+    name = models.CharField(max_length=30)
     type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
     school = models.ForeignKey("School", on_delete=models.PROTECT)
 
@@ -16,6 +17,7 @@ class User(AbstractUser):
             "id": self.id,
             "username": self.username,
             "email": self.email,
+            "name":self.name,
             "type": self.type,
             "schoolID": self.school.id,
             "schoolName": self.school.name,

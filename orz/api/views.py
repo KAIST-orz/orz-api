@@ -22,6 +22,7 @@ def signup(request):
             username = body["username"]
             email = body["email"]
             password = body["password"]
+            name = body["name"]
             isLecturer = body["isLecturer"]
             schoolID = body["schoolID"]
         except KeyError:
@@ -199,9 +200,11 @@ def user(request, userID):
         body = json.loads(request.body.decode('utf-8'))
         try:
             email = body["email"]
+            name = body["name"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
+        user.name = name
         user.email = email
         if "password" in body:
             user.set_password(body["password"])
