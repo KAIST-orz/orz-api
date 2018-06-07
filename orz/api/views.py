@@ -368,6 +368,10 @@ def studentPersonalSchedules(request, userID):
         if end < start:
             return HttpResponseBadRequest('End should not be before start')
 
+        if PersonalSchedule.objects.filter(student=student, start__lt=end, end__gt=start).exists() \
+            or TimeForAssignment.objects.filter(student=student, start__lt=end, end__gt=start).exists():
+            return HttpResponseBadRequest('Time overlapping')
+
         personalSchedule = PersonalSchedule.objects.create(
             student = student,
             start = start,
@@ -404,6 +408,10 @@ def studentPersonalSchedule(request, userID, scheduleID):
 
         if end < start:
             return HttpResponseBadRequest('End should not be before start')
+
+        if PersonalSchedule.objects.filter(student=student, start__lt=end, end__gt=start).exists() \
+            or TimeForAssignment.objects.filter(student=student, start__lt=end, end__gt=start).exists():
+            return HttpResponseBadRequest('Time overlapping')
 
         personalSchedule.start = start
         personalSchedule.end = end
@@ -463,6 +471,10 @@ def studentAssignmentTimeForAssignments(request, userID, assignmentID):
         if end < start:
             return HttpResponseBadRequest('End should not be before start')
 
+        if PersonalSchedule.objects.filter(student=student, start__lt=end, end__gt=start).exists() \
+            or TimeForAssignment.objects.filter(student=student, start__lt=end, end__gt=start).exists():
+            return HttpResponseBadRequest('Time overlapping')
+
         timeForAssignments = TimeForAssignment.objects.create(
             student = student,
             start = start,
@@ -500,6 +512,10 @@ def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID
 
         if end < start:
             return HttpResponseBadRequest('End should not be before start')
+
+        if PersonalSchedule.objects.filter(student=student, start__lt=end, end__gt=start).exists() \
+            or TimeForAssignment.objects.filter(student=student, start__lt=end, end__gt=start).exists():
+            return HttpResponseBadRequest('Time overlapping')
 
         timeForAssignment.start = start
         timeForAssignment.end = end
