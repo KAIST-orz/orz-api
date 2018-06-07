@@ -115,6 +115,9 @@ class StudentAssignment(models.Model):
     significance = models.IntegerField(null=True)
     alarms = models.ManyToManyField("ScheduleAlarm")
 
+    class Meta:
+        unique_together = (("student", "assignment"))
+
     def toJSON(self):
         return {
             **self.assignment.toJSON(),
