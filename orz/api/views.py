@@ -493,3 +493,36 @@ def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID
         timeForAssignment.delete()
 
         return JsonResponse({})
+
+
+@csrf_exempt
+@require_http_methods(["GET", "PUT"])
+def studentAlarms(request, userID):
+    student = get_object_or_404(Student, user__id=userID)
+    if request.method == "GET":
+        ctx = {
+            "assignmentDueAlarm":student.assignmentDueAlarm,
+            "personalScheduleAlarm":student.personalScheduleAlarm,
+            "timeForAssignmentAlarm":student.timeForAssignmentAlarm,
+        }
+        return JsonResponse(ctx)
+    elif request.method == "PUT":
+        body = json.loads(request.body.decode('utf-8'))
+        try:
+            assignmentDueAlarm = body["assignmentDueAlarm"]
+            personalScheduleAlarm = body["personalScheduleAlarm"]
+            timeForAssignmentAlarm = body["timeForAssignmentAlarm"]
+        except KeyError:
+            return HttpResponseBadRequest('Missing fields in request data')
+
+        student.assignmentDueAlarm = assignmentDueAlarm
+        student.personalScheduleAlarm = personalScheduleAlarm
+        student.timeForAssignmentAlarm = timeForAssignmentAlarm
+        student.save()
+
+        ctx = {
+            "assignmentDueAlarm":student.assignmentDueAlarm,
+            "personalScheduleAlarm":student.personalScheduleAlarm,
+            "timeForAssignmentAlarm":student.timeForAssignmentAlarm,
+        }
+        return JsonResponse(ctx)

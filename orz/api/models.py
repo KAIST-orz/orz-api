@@ -35,6 +35,9 @@ class Lecturer(models.Model):
 class Student(models.Model):
     user = models.OneToOneField("User", related_name="studentProfile", on_delete=models.CASCADE)
     subscribingCourses = models.ManyToManyField("Course", related_name="students")
+    assignmentDueAlarm = models.IntegerField(default=15)
+    personalScheduleAlarm = models.IntegerField(default=15)
+    timeForAssignmentAlarm = models.IntegerField(default=15)
 
     def toJSON(self):
         return {

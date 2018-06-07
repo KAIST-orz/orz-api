@@ -91,6 +91,9 @@ urlpatterns = [
 
     # A specific time for assignment of a specific assignment of a specific student
     # Allowed methods : GET, PUT, DELETE
-    path('students/<int:userID>/assignments/<int:assignmentID>/time-for-assignments/<int:scheduleID>', views.studentAssignmentTimeForAssignment)
+    path('students/<int:userID>/assignments/<int:assignmentID>/time-for-assignments/<int:scheduleID>', views.studentAssignmentTimeForAssignment),
 
+    # Alarm times fof a specific student
+    # Allowed methods : GET, PUT
+    path('students/<int:userID>/alarms', views.studentAlarms)
 ]
