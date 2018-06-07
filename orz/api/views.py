@@ -306,11 +306,18 @@ def studentAssignment(request, userID, assignmentID):
         body = json.loads(request.body.decode('utf-8'))
         try:
             timeEstimation = body["timeEstimation"]
+            significance = body["significance"]
+            alarms = body.getlist("alarms")
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
         studentAssignment.timeEstimation = timeEstimation
+        studentAssignment.significance = significance
         studentAssignment.save()
+        studentAssignment.alarms.all().delete()
+        for a in alarms:
+            scheduleAlarm = ScheduleAlarm.objects.create(minutes=a)
+            studentAssignment.alarms.add(scheduleAlarm)
 
         assignment.updateAverageTimeEstimation()
 

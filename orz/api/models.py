@@ -113,6 +113,7 @@ class StudentAssignment(models.Model):
     assignment = models.ForeignKey("Assignment", related_name="studentAssignments", on_delete=models.CASCADE)
     timeEstimation = models.IntegerField(null=True)
     significance = models.IntegerField(null=True)
+    alarms = models.ManyToManyField("ScheduleAlarm")
 
     def toJSON(self):
         return {
@@ -121,6 +122,7 @@ class StudentAssignment(models.Model):
             "significance": self.significance,
             "timeForAssignments": [t.toJSON() for t in self.timeForAssignments.all()],
             "timeForAssignmentsSum": sum((t.end-t.start).total_seconds()/3600 for t in self.timeForAssignments.all()),
+            "alarms": [a.minutes for a in self.alarms.all()],
         }
 
 
