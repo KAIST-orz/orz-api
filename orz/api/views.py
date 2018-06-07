@@ -365,6 +365,9 @@ def studentPersonalSchedules(request, userID):
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
+        if end < start:
+            return HttpResponseBadRequest('End should not be before start')
+
         personalSchedule = PersonalSchedule.objects.create(
             student = student,
             start = start,
@@ -398,6 +401,9 @@ def studentPersonalSchedule(request, userID, scheduleID):
             alarms = body["alarms"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
+
+        if end < start:
+            return HttpResponseBadRequest('End should not be before start')
 
         personalSchedule.start = start
         personalSchedule.end = end
@@ -454,6 +460,9 @@ def studentAssignmentTimeForAssignments(request, userID, assignmentID):
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
+        if end < start:
+            return HttpResponseBadRequest('End should not be before start')
+
         timeForAssignments = TimeForAssignment.objects.create(
             student = student,
             start = start,
@@ -488,6 +497,9 @@ def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID
             alarms = body["alarms"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
+
+        if end < start:
+            return HttpResponseBadRequest('End should not be before start')
 
         timeForAssignment.start = start
         timeForAssignment.end = end
