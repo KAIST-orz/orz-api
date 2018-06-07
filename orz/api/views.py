@@ -307,7 +307,7 @@ def studentAssignment(request, userID, assignmentID):
         try:
             timeEstimation = body["timeEstimation"]
             significance = body["significance"]
-            alarms = body.getlist("alarms")
+            alarms = body["alarms"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
@@ -358,7 +358,7 @@ def studentPersonalSchedules(request, userID):
             start = body["start"]
             end = body["end"]
             name = body["name"]
-            alarms = body.getlist("alarms")
+            alarms = body["alarms"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
@@ -392,7 +392,7 @@ def studentPersonalSchedule(request, userID, scheduleID):
             start = body["start"]
             end = body["end"]
             name = body["name"]
-            alarms = body.getlist("alarms")
+            alarms = body["alarms"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
@@ -447,7 +447,7 @@ def studentAssignmentTimeForAssignments(request, userID, assignmentID):
         try:
             start = body["start"]
             end = body["end"]
-            alarms = body.getlist("alarms")
+            alarms = body["alarms"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
@@ -482,7 +482,7 @@ def studentAssignmentTimeForAssignment(request, userID, assignmentID, scheduleID
         try:
             start = body["start"]
             end = body["end"]
-            alarms = body.getlist("alarms")
+            alarms = body["alarms"]
         except KeyError:
             return HttpResponseBadRequest('Missing fields in request data')
 
